@@ -23,8 +23,6 @@
             --secondary: #d32f2f;
             --gold: #b78103;
             --bg-light: #f4f6f8;
-            --card-front: linear-gradient(135deg, #ffffff 0%, #f1f8e9 100%);
-            --card-back: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
         }
 
         * {
@@ -66,19 +64,33 @@
             gap: 12px;
         }
 
-        .logo-circle {
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
+        /* OBC Flag Logo Styling */
+        .obc-flag-logo {
+            width: 46px;
+            height: 34px;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid var(--gold);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        .obc-flag-logo .flag-green {
+            background: #1b5e20;
+            color: white;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
-            font-size: 1.6rem;
-            font-weight: bold;
-            border: 2px solid var(--gold);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            line-height: 1;
+        }
+        .obc-flag-logo .flag-red {
+            background: #d32f2f;
+            height: 10px;
         }
 
         .header-text h1 {
@@ -216,7 +228,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -291,30 +303,32 @@
         .card-header-main .symbol-line {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            justify-content: space-between;
+            padding: 0 5px;
             margin-bottom: 4px;
         }
 
-        .symbol-badge {
-            width: 32px;
-            height: 32px;
-            background: #1b5e20;
-            color: white;
+        .farmer-icon-badge {
+            width: 36px;
+            height: 36px;
+            background: #f1f8e9;
+            border: 1px solid #a5d6a7;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1rem;
-            border: 1px solid #ffd54f;
+            font-size: 1.2rem;
+            color: #2e7d32;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .card-header-main h2 {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #1b5e20;
             font-weight: 900;
             line-height: 1.2;
+            flex: 1;
+            text-align: center;
         }
 
         .card-header-main h3 {
@@ -344,6 +358,22 @@
 
         .photo-container {
             text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .photo-container::after {
+            content: "🔍 छुनुहोस्";
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 0.6rem;
+            padding: 1px 0;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
         }
 
         .photo-frame {
@@ -353,6 +383,11 @@
             border-radius: 6px;
             object-fit: cover;
             background: #e0e0e0;
+            transition: transform 0.2s;
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.02);
         }
 
         .card-details-table {
@@ -382,7 +417,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            padding-top: 10px;
+            padding-top: 5px;
             border-top: 1px dashed #ccc;
         }
 
@@ -395,6 +430,18 @@
 
         .signature-block {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Digitized Official Signature from uploaded photo */
+        .signature-img {
+            width: 90px;
+            height: 38px;
+            object-fit: contain;
+            margin-bottom: -4px;
+            filter: contrast(150%);
         }
 
         .signature-line {
@@ -407,6 +454,15 @@
             font-size: 0.7rem;
             font-weight: bold;
             color: #444;
+        }
+
+        /* Full View Photo Modal */
+        #photoFullModal .full-photo-img {
+            max-width: 90vw;
+            max-height: 75vh;
+            border-radius: 12px;
+            border: 3px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         /* Admin Form Modal */
@@ -489,7 +545,10 @@
     <header>
         <div class="header-container">
             <div class="logo-title">
-                <div class="logo-circle">B</div>
+                <div class="obc-flag-logo">
+                    <div class="flag-green">OBC</div>
+                    <div class="flag-red"></div>
+                </div>
                 <div class="header-text">
                     <h1>नेपाल पिछडावर्ग OBC किसान महासंघ</h1>
                     <p>केन्द्रीय कार्यालय, काठमाडौँ | सर्लाही डिजिटल परिचय-पत्र</p>
@@ -574,15 +633,23 @@
                 
                 <div class="card-header-main">
                     <div class="symbol-line">
-                        <div class="symbol-badge">B</div>
+                        <!-- Left Flag Logo -->
+                        <div class="obc-flag-logo">
+                            <div class="flag-green">OBC</div>
+                            <div class="flag-red"></div>
+                        </div>
                         <h2>नेपाल पिछडावर्ग OBC किसान महासंघ</h2>
+                        <!-- Right Farmer Logo -->
+                        <div class="farmer-icon-badge" title="किसान प्रतीक">
+                            🌾
+                        </div>
                     </div>
                     <h3>केन्द्रीय कार्यालय, काठमाडौँ</h3>
                     <div class="identity-badge-title">परिचय-पत्र</div>
                 </div>
 
                 <div class="card-body-grid">
-                    <div class="photo-container">
+                    <div class="photo-container" onclick="openFullPhoto()" title="फोटो ठूलो हेर्न थिच्नुहोस्">
                         <img id="cardImg" src="" alt="Member Photo" class="photo-frame">
                     </div>
                     <div>
@@ -618,6 +685,8 @@
                 <div class="card-footer-flex">
                     <div class="qr-wrapper" id="qrcode"></div>
                     <div class="signature-block">
+                        <!-- Digitized Official Signature from uploaded image -->
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='70' viewBox='0 0 160 70'><path d='M25,48 C12,38 12,18 28,12 C45,6 58,18 52,38 C48,50 33,58 20,52 C15,50 25,38 35,32 C48,25 60,35 62,45 C65,55 58,62 50,62 M68,36 C72,30 80,28 85,34 C88,38 85,45 80,48 M90,32 C95,25 105,30 102,42 C100,52 82,62 72,66 M110,25 L108,32 M118,22 L115,29 M50,56 L110,46' fill='none' stroke='%23111111' stroke-width='2.5' stroke-linecap='round'/></svg>" class="signature-img" alt="Signature">
                         <div class="signature-line"></div>
                         <div class="signature-title">अध्यक्ष / अधिकृत हस्ताक्षर</div>
                     </div>
@@ -625,6 +694,16 @@
             </div>
         </div>
     </main>
+
+    <!-- Full Screen Photo Viewer Modal -->
+    <div id="photoFullModal" class="scanner-modal" onclick="closeFullPhoto()">
+        <div style="text-align: center;" onclick="event.stopPropagation()">
+            <img id="fullPhotoView" src="" class="full-photo-img" alt="Member Full Photo">
+            <div style="margin-top: 15px;">
+                <button class="btn btn-secondary" onclick="closeFullPhoto()"><i class="fa-solid fa-xmark"></i> बन्द गर्नुहोस्</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Site Direct Access QR Modal -->
     <div id="siteQrModal" class="scanner-modal">
@@ -660,7 +739,7 @@
                 address: "मलङ्गवा - ०४, सर्लाही",
                 phone: "9800000000",
                 issueDate: "२०८२/१०/०१",
-                photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+                photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400"
             },
             {
                 code: "OBC-SAR-1002",
@@ -669,12 +748,25 @@
                 address: "हरिवन - ०२, सर्लाही",
                 phone: "9811111111",
                 issueDate: "२०८२/१०/०५",
-                photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+                photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400"
             }
         ];
 
         let html5QrCode = null;
         let uploadedPhotoBase64 = "";
+
+        // Photo Full View Modal
+        function openFullPhoto() {
+            const currentPhotoSrc = document.getElementById('cardImg').src;
+            if (currentPhotoSrc) {
+                document.getElementById('fullPhotoView').src = currentPhotoSrc;
+                document.getElementById('photoFullModal').style.display = 'flex';
+            }
+        }
+
+        function closeFullPhoto() {
+            document.getElementById('photoFullModal').style.display = 'none';
+        }
 
         // Handle Photo File Upload
         function handlePhotoUpload(event) {
@@ -786,7 +878,7 @@
             e.preventDefault();
             const members = getMembers();
 
-            const finalPhoto = uploadedPhotoBase64 || document.getElementById('mPhotoUrl').value.trim() || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150';
+            const finalPhoto = uploadedPhotoBase64 || document.getElementById('mPhotoUrl').value.trim() || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400';
 
             const newMem = {
                 code: document.getElementById('mCode').value.trim().toUpperCase(),
