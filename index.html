@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ओबीसी महासंघ सर्लाही | OBC Mahasangh Sarlahi - Digital Member Card</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary: #DC2626;
+            --primary-dark: #991B1B;
+            --secondary: #1E3A8A;
+            --gold: #D97706;
+            --bg-light: #F8FAFC;
+            --card-front: linear-gradient(135deg, #1E1B4B 0%, #1E3A8A 50%, #0284C7 100%);
+            --card-back: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #F1F5F9;
+            color: #334155;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-align: left;
+        }
+
+        .logo-emblem {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            font-weight: bold;
+            font-size: 1.5rem;
+            border: 2px solid #FEF08A;
+        }
+
+        .header-titles h1 {
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+        }
+
+        .header-titles p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-nav {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        main {
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-title {
+            font-size: 1.25rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .search-subtitle {
+            font-size: 0.9rem;
+            color: #64748B;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--secondary);
+        }
+
+        .btn-search {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-search:hover {
+            background: #1D4ED8;
+        }
+
+        .sample-tags {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #64748B;
+        }
+
+        .sample-tag {
+            display: inline-block;
+            background: #E2E8F0;
+            color: #334155;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 0.2rem;
+            font-family: monospace;
+        }
+
+        .sample-tag:hover {
+            background: #CBD5E1;
+        }
+
+        .card-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            perspective: 1000px;
+        }
+
+        .card-wrapper {
+            width: 380px;
+            height: 240px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+        }
+
+        .card-wrapper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .id-card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            color: white;
+            padding: 12px 16px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .id-card-front {
+            background: var(--card-front);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .id-card-back {
+            background: var(--card-back);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-header-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 6px;
+        }
+
+        .card-header-mini img, .mini-emblem {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .card-org-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            line-height: 1.1;
+            text-transform: uppercase;
+            color: #FEF08A;
+        }
+
+        .card-sub-title {
+            font-size: 0.6rem;
+            opacity: 0.8;
+        }
+
+        .card-body {
+            display: flex;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .member-photo-box {
+            width: 80px;
+            height: 95px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #FEF08A;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .member-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .info-group {
+            line-height: 1.1;
+        }
+
+        .info-label {
+            font-size: 0.55rem;
+            color: #93C5FD;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        .info-value.name {
+            font-size: 0.95rem;
+            color: #FEF08A;
+            font-weight: 700;
+        }
+
+        .card-footer-mini {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 0.6rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 4px;
+        }
+
+        .qr-placeholder {
+            width: 45px;
+            height: 45px;
+            background: white;
+            padding: 2px;
+            border-radius: 4px;
+        }
+
+        .qr-placeholder img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-action {
+            background: white;
+            color: #334155;
+            border: 1px solid #CBD5E1;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #F1F5F9;
+            border-color: #94A3B8;
+        }
+
+        .btn-action.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-action.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .error-message {
+            display: none;
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #FCA5A5;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #64748B;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: #0F172A;
+            color: #94A3B8;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .card-container, .card-container * {
+                visibility: visible;
+            }
+            .card-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                display: flex !important;
+            }
+            .card-controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-emblem">OBC</div>
+                <div class="header-titles">
+                    <h1>ओबीसी महासंघ, सर्लाही</h1>
+                    <p>OBC Mahasangh Sarlahi, Nepal • Membership Portal</p>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-nav" onclick="openModal('addMemberModal')"><i class="fas fa-plus"></i> Add Member</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="search-card">
+            <h2 class="search-title">सदस्यता कार्ड खोजी / Verify Membership Card</h2>
+            <p class="search-subtitle">Enter your membership card number to view and download your digital ID card</p>
+            
+            <div class="search-form">
+                <input type="text" id="cardInput" class="search-input" placeholder="e.g. OBC-SAR-1001" autocomplete="off">
+                <button class="btn-search" onclick="searchMember()"><i class="fas fa-search"></i> Search</button>
+            </div>
+
+            <div class="sample-tags">
+                Try demo cards: 
+                <span class="sample-tag" onclick="quickSearch('OBC-SAR-1001')">OBC-SAR-1001</span>
+                <span class="sample-tag" onclick="quickSearch('OBC-SAR-1002')">OBC-SAR-1002</span>
+                <span class="sample-tag" onclick="quickSearch('OBC-SAR-1003')">OBC-SAR-1003</span>
+            </div>
+
+            <div id="errorMessage" class="error-message">
+                <i class="fas fa-exclamation-circle"></i> Member record not found. Please check the card number.
+            </div>
+        </div>
+
+        <div id="cardContainer" class="card-container">
+            <div class="card-wrapper" id="cardWrapper">
+                <!-- Front Side -->
+                <div class="id-card id-card-front">
+                    <div class="card-header-mini">
+                        <div class="mini-emblem">OBC</div>
+                        <div>
+                            <div class="card-org-title">OBC Mahasangh Sarlahi</div>
+                            <div class="card-sub-title">ओबीसी महासंघ, जिल्ला कार्यसमिति सर्लाही</div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="member-photo-box">
+                            <img id="cardPhoto" src="" alt="Member Photo">
+                        </div>
+                        <div class="member-info">
+                            <div class="info-group">
+                                <div class="info-label">Full Name / नाम</div>
+                                <div class="info-value name" id="cardName">-</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Card No / सदस्यता नं.</div>
+                                <div class="info-value" id="cardNo">-</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Designation / पद</div>
+                                <div class="info-value" id="cardRole">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer-mini">
+                        <div>
+                            <div>Issue Date: <span id="cardIssueDate">-</span></div>
+                            <div style="color: #93C5FD; font-weight: bold;">Sarlahi, Madhesh Province, Nepal</div>
+                        </div>
+                        <div class="qr-placeholder" id="qrcode"></div>
+                    </div>
+                </div>
+
+                <!-- Back Side -->
+                <div class="id-card id-card-back">
+                    <div class="card-header-mini">
+                        <div>
+                            <div class="card-org-title">Member Details & Rules</div>
+                            <div class="card-sub-title">ओबीसी महासंघ सर्लाही - परिचय पत्र</div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.65rem; line-height: 1.4; margin: 6px 0; color: #CBD5E1;">
+                        <p><strong>Municipality:</strong> <span id="cardAddress" style="color: white;">-</span></p>
+                        <p><strong>Contact Phone:</strong> <span id="cardPhone" style="color: white;">-</span></p>
+                        <p><strong>Blood Group:</strong> <span id="cardBlood" style="color: #FEF08A;">-</span></p>
+                        <hr style="border-color: rgba(255,255,255,0.1); margin: 4px 0;">
+                        <p style="font-size: 0.55rem; color: #94A3B8;">If found, please return to District Office, OBC Mahasangh, Malangwa, Sarlahi, Nepal.</p>
+                    </div>
+
+                    <div class="card-footer-mini">
+                        <div style="text-align: center; width: 100%;">
+                            <div style="border-top: 1px dashed rgba(255,255,255,0.4); width: 80px; margin: 0 auto 2px auto;"></div>
+                            <div style="font-size: 0.55rem; color: #93C5FD;">Authorized Signature</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-controls">
+                <button class="btn-action" onclick="flipCard()"><i class="fas fa-sync"></i> Flip Card Side</button>
+                <button class="btn-action primary" onclick="window.print()"><i class="fas fa-print"></i> Print / Download PDF</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Add New Member -->
+    <div class="modal-overlay" id="addMemberModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Add New Member Record</h3>
+                <button class="modal-close" onclick="closeModal('addMemberModal')">&times;</button>
+            </div>
+            <form id="addMemberForm" onsubmit="saveMember(event)">
+                <div class="form-group">
+                    <label>Card Number (Unique)</label>
+                    <input type="text" id="newCardNo" class="form-control" placeholder="e.g. OBC-SAR-1004" required>
+                </div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="newName" class="form-control" placeholder="Ram Bahadur Shrestha" required>
+                </div>
+                <div class="form-group">
+                    <label>Designation / Role</label>
+                    <input type="text" id="newRole" class="form-control" placeholder="General Member" required>
+                </div>
+                <div class="form-group">
+                    <label>Municipality / Local Address</label>
+                    <input type="text" id="newAddress" class="form-control" placeholder="Malangwa-2, Sarlahi" required>
+                </div>
+                <div class="form-group">
+                    <label>Contact Phone Number</label>
+                    <input type="text" id="newPhone" class="form-control" placeholder="9800000000" required>
+                </div>
+                <div class="form-group">
+                    <label>Blood Group</label>
+                    <select id="newBlood" class="form-control">
+                        <option value="O+">O+</option>
+                        <option value="A+">A+</option>
+                        <option value="B+">B+</option>
+                        <option value="AB+">AB+</option>
+                        <option value="O-">O-</option>
+                        <option value="A-">A-</option>
+                        <option value="B-">B-</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Photo URL or Upload</label>
+                    <input type="text" id="newPhoto" class="form-control" placeholder="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
+                </div>
+                <button type="submit" class="btn-action primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Save Member Record</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 OBC Mahasangh District Committee Sarlahi, Nepal. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const initialMembers = {
+            "OBC-SAR-1001": {
+                cardNo: "OBC-SAR-1001",
+                name: "Ramesh Mahato",
+                role: "District Member",
+                address: "Malangwa Muni-3, Sarlahi",
+                phone: "9812345678",
+                blood: "B+",
+                issueDate: "2024-01-15",
+                photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"
+            },
+            "OBC-SAR-1002": {
+                cardNo: "OBC-SAR-1002",
+                name: "Sita Kumari Chaudhary",
+                role: "Executive Member",
+                address: "Lalbandi-5, Sarlahi",
+                phone: "9808765432",
+                blood: "O+",
+                issueDate: "2024-02-10",
+                photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150"
+            },
+            "OBC-SAR-1003": {
+                cardNo: "OBC-SAR-1003",
+                name: "Anil Kumar Sah",
+                role: "Treasurer",
+                address: "Barahathawa-1, Sarlahi",
+                phone: "9845123987",
+                blood: "A+",
+                issueDate: "2024-01-20",
+                photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150"
+            }
+        };
+
+        function getMembers() {
+            const stored = localStorage.getItem('obc_sarlahi_members');
+            if (!stored) {
+                localStorage.setItem('obc_sarlahi_members', JSON.stringify(initialMembers));
+                return initialMembers;
+            }
+            return JSON.parse(stored);
+        }
+
+        let qrCodeObj = null;
+
+        function searchMember() {
+            const cardInput = document.getElementById('cardInput').value.trim().toUpperCase();
+            const members = getMembers();
+            const member = members[cardInput];
+
+            const errorMessage = document.getElementById('errorMessage');
+            const cardContainer = document.getElementById('cardContainer');
+
+            if (member) {
+                errorMessage.style.display = 'none';
+                
+                document.getElementById('cardName').innerText = member.name;
+                document.getElementById('cardNo').innerText = member.cardNo;
+                document.getElementById('cardRole').innerText = member.role;
+                document.getElementById('cardIssueDate').innerText = member.issueDate;
+                document.getElementById('cardPhoto').src = member.photo || 'https://via.placeholder.com/150';
+                document.getElementById('cardAddress').innerText = member.address;
+                document.getElementById('cardPhone').innerText = member.phone;
+                document.getElementById('cardBlood').innerText = member.blood;
+
+                const qrDiv = document.getElementById("qrcode");
+                qrDiv.innerHTML = "";
+                qrCodeObj = new QRCode(qrDiv, {
+                    text: `OBC-SARLAHI-VERIFIED:${member.cardNo}:${member.name}`,
+                    width: 45,
+                    height: 45,
+                    colorDark : "#0F172A",
+                    colorLight : "#FFFFFF",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+
+                cardContainer.style.display = 'flex';
+                document.getElementById('cardWrapper').classList.remove('flipped');
+            } else {
+                cardContainer.style.display = 'none';
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function quickSearch(code) {
+            document.getElementById('cardInput').value = code;
+            searchMember();
+        }
+
+        function flipCard() {
+            document.getElementById('cardWrapper').classList.toggle('flipped');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function saveMember(e) {
+            e.preventDefault();
+            const cardNo = document.getElementById('newCardNo').value.trim().toUpperCase();
+            const name = document.getElementById('newName').value.trim();
+            const role = document.getElementById('newRole').value.trim();
+            const address = document.getElementById('newAddress').value.trim();
+            const phone = document.getElementById('newPhone').value.trim();
+            const blood = document.getElementById('newBlood').value;
+            let photo = document.getElementById('newPhoto').value.trim();
+
+            if (!photo) {
+                photo = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
+            }
+
+            const members = getMembers();
+            members[cardNo] = {
+                cardNo,
+                name,
+                role,
+                address,
+                phone,
+                blood,
+                issueDate: new Date().toISOString().split('T')[0],
+                photo
+            };
+
+            localStorage.setItem('obc_sarlahi_members', JSON.stringify(members));
+            alert(`Member ${name} (${cardNo}) added successfully!`);
+            closeModal('addMemberModal');
+            document.getElementById('addMemberForm').reset();
+            
+            document.getElementById('cardInput').value = cardNo;
+            searchMember();
+        }
+    </script>
+</body>
+</html>
