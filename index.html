@@ -94,6 +94,11 @@
             color: #a5d6a7;
         }
 
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
         .admin-btn {
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -140,14 +145,15 @@
         .search-inputs {
             display: flex;
             gap: 10px;
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .search-inputs input {
             flex: 1;
-            min-width: 220px;
+            min-width: 200px;
             padding: 0.8rem 1rem;
             border: 2px solid #cbd5e1;
             border-radius: 8px;
@@ -202,7 +208,7 @@
             background: #8c6302;
         }
 
-        /* QR Scanner Modal Modal Style */
+        /* Modal Styles */
         .scanner-modal {
             display: none;
             position: fixed;
@@ -225,6 +231,12 @@
             width: 100%;
             text-align: center;
             position: relative;
+        }
+
+        #siteQrContainer {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
         }
 
         #qr-reader {
@@ -466,7 +478,7 @@
                 box-shadow: none;
                 border: 2px solid #1b5e20;
             }
-            .action-bar, header, footer, .search-box-card, .admin-section {
+            .action-bar, header, footer, .search-box-card, .admin-section, .scanner-modal {
                 display: none !important;
             }
         }
@@ -483,7 +495,10 @@
                     <p>केन्द्रीय कार्यालय, काठमाडौँ | सर्लाही डिजिटल परिचय-पत्र</p>
                 </div>
             </div>
-            <button class="admin-btn" onclick="toggleAdminLogin()"><i class="fa-solid fa-lock"></i> Admin</button>
+            <div class="header-actions">
+                <button class="admin-btn" onclick="openSiteQR()"><i class="fa-solid fa-qrcode"></i> Site QR</button>
+                <button class="admin-btn" onclick="toggleAdminLogin()"><i class="fa-solid fa-lock"></i> Admin</button>
+            </div>
         </div>
     </header>
 
@@ -495,7 +510,7 @@
             <div class="search-inputs">
                 <input type="text" id="searchInput" placeholder="उदा: OBC-SAR-1001" onkeyup="if(event.key==='Enter') searchMember()">
                 <button class="btn btn-primary" onclick="searchMember()"><i class="fa-solid fa-magnifying-glass"></i> खोज्नुहोस्</button>
-                <button class="btn btn-qr" onclick="openQRScanner()"><i class="fa-solid fa-qrcode"></i> QR Scanner</button>
+                <button class="btn btn-qr" onclick="openQRScanner()"><i class="fa-solid fa-camera"></i> Scan Card QR</button>
             </div>
             <p id="searchStatus" style="margin-top: 10px; font-weight: bold; font-size: 0.88rem;"></p>
         </div>
@@ -607,7 +622,18 @@
         </div>
     </main>
 
-    <!-- QR Code Modal Window -->
+    <!-- Site Direct Access QR Modal -->
+    <div id="siteQrModal" class="scanner-modal">
+        <div class="scanner-content">
+            <h3>वेबसाइटको QR Code</h3>
+            <p style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">मोबाईल क्यामेराले स्क्यान गरी सिधै वेबसाइट खोल्नुहोस्</p>
+            <div id="siteQrContainer"></div>
+            <p style="font-size: 0.75rem; word-break: break-all; color: var(--primary); font-weight: bold;" id="siteUrlText"></p>
+            <button class="btn btn-secondary" style="margin-top: 15px;" onclick="closeSiteQR()">बन्द गर्नुहोस्</button>
+        </div>
+    </div>
+
+    <!-- QR Code Scanner Modal Window -->
     <div id="qrModal" class="scanner-modal">
         <div class="scanner-content">
             <h3>QR Code Scan गर्नुहोस्</h3>
@@ -653,6 +679,23 @@
                 return defaultMembers;
             }
             return JSON.parse(saved);
+        }
+
+        // Display Website QR Code
+        function openSiteQR() {
+            const siteUrl = window.location.href;
+            document.getElementById('siteUrlText').innerText = siteUrl;
+            document.getElementById('siteQrContainer').innerHTML = "";
+            new QRCode(document.getElementById('siteQrContainer'), {
+                text: siteUrl,
+                width: 180,
+                height: 180
+            });
+            document.getElementById('siteQrModal').style.display = 'flex';
+        }
+
+        function closeSiteQR() {
+            document.getElementById('siteQrModal').style.display = 'none';
         }
 
         // Search Functionality
