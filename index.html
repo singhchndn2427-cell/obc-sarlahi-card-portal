@@ -541,12 +541,16 @@
                         <input type="text" id="mPhone" placeholder="9800000000" required>
                     </div>
                     <div class="form-group">
-                        <label>जारी मिति (Issue Date)*</label>
-                        <input type="date" id="mIssueDate" required>
+                        <label>जारी मिति (Issue Date - B.S.)*</label>
+                        <input type="text" id="mIssueDate" placeholder="उदा: २०८२/१०/०१" required>
                     </div>
-                    <div class="form-group" style="grid-column: span 2;">
-                        <label>फोटो URL (Photo Image Link)</label>
-                        <input type="url" id="mPhoto" placeholder="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150">
+                    <div class="form-group">
+                        <label>फोटो छान्नुहोस् (Upload Photo File)</label>
+                        <input type="file" id="mPhotoFile" accept="image/*" onchange="handlePhotoUpload(event)">
+                    </div>
+                    <div class="form-group">
+                        <label>वा फोटो URL (Photo Link)</label>
+                        <input type="url" id="mPhotoUrl" placeholder="https://...">
                     </div>
                 </div>
                 <div style="margin-top: 15px; display: flex; gap: 10px;">
@@ -605,7 +609,7 @@
                             </tr>
                             <tr>
                                 <td class="label">जारी मिति:</td>
-                                <td class="value" id="cardIssueDate">-</td>
+                                <td class="value"><span id="cardIssueDate">-</span> (वि.सं.)</td>
                             </tr>
                         </table>
                     </div>
@@ -655,7 +659,7 @@
                 role: "जिल्ला अध्यक्ष",
                 address: "मलङ्गवा - ०४, सर्लाही",
                 phone: "9800000000",
-                issueDate: "2026-01-15",
+                issueDate: "२०८२/१०/०१",
                 photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
             },
             {
@@ -664,12 +668,25 @@
                 role: "सचिव",
                 address: "हरिवन - ०२, सर्लाही",
                 phone: "9811111111",
-                issueDate: "2026-01-20",
+                issueDate: "२०८२/१०/०५",
                 photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
             }
         ];
 
         let html5QrCode = null;
+        let uploadedPhotoBase64 = "";
+
+        // Handle Photo File Upload
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedPhotoBase64 = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
         // Initialize local database
         function getMembers() {
@@ -769,14 +786,16 @@
             e.preventDefault();
             const members = getMembers();
 
+            const finalPhoto = uploadedPhotoBase64 || document.getElementById('mPhotoUrl').value.trim() || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150';
+
             const newMem = {
                 code: document.getElementById('mCode').value.trim().toUpperCase(),
                 name: document.getElementById('mName').value.trim(),
                 role: document.getElementById('mRole').value.trim(),
                 address: document.getElementById('mAddress').value.trim(),
                 phone: document.getElementById('mPhone').value.trim(),
-                issueDate: document.getElementById('mIssueDate').value,
-                photo: document.getElementById('mPhoto').value.trim() || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
+                issueDate: document.getElementById('mIssueDate').value.trim(),
+                photo: finalPhoto
             };
 
             // Check duplicate
@@ -788,7 +807,10 @@
             members.push(newMem);
             localStorage.setItem('obc_kisan_members', JSON.stringify(members));
             alert("सदस्य सफलतापूर्वक थपियो!");
+            
+            // Reset Form & Photo Cache
             document.getElementById('addMemberForm').reset();
+            uploadedPhotoBase64 = "";
             closeAdmin();
 
             // Auto Search New Member
