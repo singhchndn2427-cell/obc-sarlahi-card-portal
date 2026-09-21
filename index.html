@@ -170,27 +170,6 @@
             background: #1D4ED8;
         }
 
-        .sample-tags {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: #64748B;
-        }
-
-        .sample-tag {
-            display: inline-block;
-            background: #E2E8F0;
-            color: #334155;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 0 0.2rem;
-            font-family: monospace;
-        }
-
-        .sample-tag:hover {
-            background: #CBD5E1;
-        }
-
         .card-container {
             display: none;
             flex-direction: column;
@@ -347,11 +326,6 @@
             border-radius: 4px;
         }
 
-        .qr-placeholder img {
-            width: 100%;
-            height: 100%;
-        }
-
         .card-controls {
             display: flex;
             gap: 1rem;
@@ -500,7 +474,7 @@
                 </div>
             </div>
             <div class="nav-actions">
-                <button class="btn-nav" onclick="openModal('addMemberModal')"><i class="fas fa-plus"></i> Add Member</button>
+                <button class="btn-nav" onclick="promptAdminLogin()"><i class="fas fa-user-lock"></i> Admin Login</button>
             </div>
         </div>
     </header>
@@ -508,22 +482,15 @@
     <main>
         <div class="search-card">
             <h2 class="search-title">सदस्यता कार्ड खोजी / Verify Membership Card</h2>
-            <p class="search-subtitle">Enter your membership card number to view and download your digital ID card</p>
+            <p class="search-subtitle">Enter your card number to view and download your digital ID card</p>
             
             <div class="search-form">
                 <input type="text" id="cardInput" class="search-input" placeholder="e.g. OBC-SAR-1001" autocomplete="off">
                 <button class="btn-search" onclick="searchMember()"><i class="fas fa-search"></i> Search</button>
             </div>
 
-            <div class="sample-tags">
-                Try demo cards: 
-                <span class="sample-tag" onclick="quickSearch('OBC-SAR-1001')">OBC-SAR-1001</span>
-                <span class="sample-tag" onclick="quickSearch('OBC-SAR-1002')">OBC-SAR-1002</span>
-                <span class="sample-tag" onclick="quickSearch('OBC-SAR-1003')">OBC-SAR-1003</span>
-            </div>
-
             <div id="errorMessage" class="error-message">
-                <i class="fas fa-exclamation-circle"></i> Member record not found. Please check the card number.
+                <i class="fas fa-exclamation-circle"></i> Member record not found. Please check your card number.
             </div>
         </div>
 
@@ -601,7 +568,22 @@
         </div>
     </main>
 
-    <!-- Modal: Add New Member -->
+    <!-- Admin Password Verification Modal -->
+    <div class="modal-overlay" id="adminPassModal">
+        <div class="modal-card" style="max-width: 360px;">
+            <div class="modal-header">
+                <h3>Admin Authorization</h3>
+                <button class="modal-close" onclick="closeModal('adminPassModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Enter Admin Password</label>
+                <input type="password" id="adminPasswordInput" class="form-control" placeholder="Password">
+            </div>
+            <button onclick="verifyAdminPassword()" class="btn-action primary" style="width: 100%; justify-content: center;">Login</button>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Member (Restricted to Admin) -->
     <div class="modal-overlay" id="addMemberModal">
         <div class="modal-card">
             <div class="modal-header">
@@ -643,7 +625,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Photo URL or Upload</label>
+                    <label>Photo URL</label>
                     <input type="text" id="newPhoto" class="form-control" placeholder="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
                 </div>
                 <button type="submit" class="btn-action primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Save Member Record</button>
@@ -656,6 +638,8 @@
     </footer>
 
     <script>
+        const ADMIN_PASSWORD = "123"; // Change this password for Admin access
+
         const initialMembers = {
             "OBC-SAR-1001": {
                 cardNo: "OBC-SAR-1001",
@@ -676,16 +660,6 @@
                 blood: "O+",
                 issueDate: "2024-02-10",
                 photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150"
-            },
-            "OBC-SAR-1003": {
-                cardNo: "OBC-SAR-1003",
-                name: "Anil Kumar Sah",
-                role: "Treasurer",
-                address: "Barahathawa-1, Sarlahi",
-                phone: "9845123987",
-                blood: "A+",
-                issueDate: "2024-01-20",
-                photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150"
             }
         };
 
@@ -739,13 +713,23 @@
             }
         }
 
-        function quickSearch(code) {
-            document.getElementById('cardInput').value = code;
-            searchMember();
-        }
-
         function flipCard() {
             document.getElementById('cardWrapper').classList.toggle('flipped');
+        }
+
+        function promptAdminLogin() {
+            openModal('adminPassModal');
+        }
+
+        function verifyAdminPassword() {
+            const pass = document.getElementById('adminPasswordInput').value;
+            if (pass === ADMIN_PASSWORD) {
+                closeModal('adminPassModal');
+                document.getElementById('adminPasswordInput').value = '';
+                openModal('addMemberModal');
+            } else {
+                alert("Incorrect password! Access denied.");
+            }
         }
 
         function openModal(id) {
