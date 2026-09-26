@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,19 +90,19 @@
             <!-- Features Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-5 rounded-xl border border-slate-200 text-center">
-                    <i class="fa-solid fa-users text-2xl text-emerald-700 mb-2"></i>
-                    <h3 class="font-bold text-slate-900 text-sm">Verified Directory</h3>
-                    <p class="text-xs text-slate-500 mt-1">Authentic union leaders and member farmer registry.</p>
+                    <i class="fa-solid fa-database text-2xl text-emerald-700 mb-2"></i>
+                    <h3 class="font-bold text-slate-900 text-sm">IndexedDB Database</h3>
+                    <p class="text-xs text-slate-500 mt-1">High-capacity storage built for over 100,000+ member entries.</p>
                 </div>
                 <div class="bg-white p-5 rounded-xl border border-slate-200 text-center">
                     <i class="fa-solid fa-qrcode text-2xl text-emerald-700 mb-2"></i>
-                    <h3 class="font-bold text-slate-900 text-sm">QR Code Ready</h3>
-                    <p class="text-xs text-slate-500 mt-1">Scan using any phone camera to access member lookup.</p>
+                    <h3 class="font-bold text-slate-900 text-sm">QR Code Access</h3>
+                    <p class="text-xs text-slate-500 mt-1">Scan using any phone camera for direct verification lookup.</p>
                 </div>
                 <div class="bg-white p-5 rounded-xl border border-slate-200 text-center">
-                    <i class="fa-solid fa-bolt text-2xl text-emerald-700 mb-2"></i>
-                    <h3 class="font-bold text-slate-900 text-sm">Fast Storage Engine</h3>
-                    <p class="text-xs text-slate-500 mt-1">Compressed image storage for instant database updates.</p>
+                    <i class="fa-solid fa-file-pdf text-2xl text-emerald-700 mb-2"></i>
+                    <h3 class="font-bold text-slate-900 text-sm">Document Hub</h3>
+                    <p class="text-xs text-slate-500 mt-1">Instant touch-to-open document preview & download option.</p>
                 </div>
             </div>
         </section>
@@ -158,11 +158,16 @@
                                 <span class="text-slate-500 font-medium"><i class="fa-solid fa-phone w-4 text-emerald-700"></i> Phone:</span>
                                 <span id="cardPhone" class="font-bold">--</span>
                             </div>
-                            <div id="cardDocRow" class="flex justify-between pt-1 hidden">
-                                <span class="text-slate-500 font-medium"><i class="fa-solid fa-paperclip w-4 text-emerald-700"></i> Attachment:</span>
-                                <a id="cardDocLink" href="#" download class="font-bold text-emerald-700 hover:underline flex items-center gap-1">
-                                    <i class="fa-solid fa-download"></i> <span id="cardDocName">Download Document</span>
-                                </a>
+                            <div id="cardDocRow" class="flex flex-col gap-2 pt-2 border-t border-slate-100 hidden">
+                                <span class="text-slate-500 font-medium"><i class="fa-solid fa-paperclip w-4 text-emerald-700"></i> Attached Document:</span>
+                                <div class="flex gap-2">
+                                    <button id="cardDocViewBtn" onclick="openMemberDoc('view')" class="flex-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold py-1.5 px-3 rounded text-xs flex items-center justify-center gap-1 transition">
+                                        <i class="fa-solid fa-eye"></i> View File
+                                    </button>
+                                    <button id="cardDocDlBtn" onclick="openMemberDoc('download')" class="flex-1 bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-1.5 px-3 rounded text-xs flex items-center justify-center gap-1 transition">
+                                        <i class="fa-solid fa-download"></i> Download
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -249,11 +254,18 @@
                     </div>
                 </div>
 
-                <!-- Members Table -->
+                <!-- Search & Paginated Table -->
                 <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                        <h3 class="font-bold text-sm text-slate-800">Registered Members Directory</h3>
-                        <span id="adminTotalCount" class="text-xs bg-emerald-100 font-bold px-2.5 py-1 rounded-full text-emerald-800">0 Members</span>
+                    <div class="p-4 border-b border-slate-100 flex flex-wrap justify-between items-center gap-3 bg-slate-50">
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-bold text-sm text-slate-800">Members Directory</h3>
+                            <span id="adminTotalCount" class="text-xs bg-emerald-100 font-bold px-2.5 py-1 rounded-full text-emerald-800">0 Members</span>
+                        </div>
+
+                        <!-- Table Quick Filter Input -->
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="adminTableFilter" oninput="handleAdminTableFilter()" placeholder="Filter by name, ID or phone..." class="px-3 py-1.5 text-xs border border-slate-300 rounded-lg outline-none focus:border-emerald-600 bg-white">
+                        </div>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -266,7 +278,7 @@
                                     <th class="p-3">Position</th>
                                     <th class="p-3">Address</th>
                                     <th class="p-3">Phone</th>
-                                    <th class="p-3">Doc</th>
+                                    <th class="p-3">Document</th>
                                     <th class="p-3 text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -274,6 +286,16 @@
                                 <!-- Dynamic Rows -->
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- PAGINATION BAR -->
+                    <div class="p-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-xs">
+                        <span id="paginationInfo" class="text-slate-500 font-medium">Showing 0 of 0</span>
+                        <div class="flex gap-2">
+                            <button id="btnPrevPage" onclick="changeAdminPage(-1)" class="px-3 py-1 bg-white border border-slate-300 rounded hover:bg-slate-100 font-bold disabled:opacity-50">Prev</button>
+                            <span id="currentPageNum" class="px-3 py-1 font-bold text-emerald-800">Page 1</span>
+                            <button id="btnNextPage" onclick="changeAdminPage(1)" class="px-3 py-1 bg-white border border-slate-300 rounded hover:bg-slate-100 font-bold disabled:opacity-50">Next</button>
+                        </div>
                     </div>
                 </div>
 
@@ -337,7 +359,7 @@
                         <img id="mPhotoPreview" src="https://placehold.co/100x100/166534/ffffff?text=Photo" class="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-300">
                         <div class="flex-grow min-w-0">
                             <input type="file" id="mPhotoFile" accept="image/*" onchange="handlePhotoUpload(event)" class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-100 file:text-emerald-800">
-                            <p id="photoStatusText" class="text-[10px] text-slate-500 mt-0.5 truncate">Auto-resizes images for instant saving speed</p>
+                            <p id="photoStatusText" class="text-[10px] text-slate-500 mt-0.5 truncate">Auto-resizes images for high capacity DB storage</p>
                         </div>
                     </div>
                 </div>
@@ -396,20 +418,32 @@
     <div id="printableArea" class="hidden"></div>
 
     <script>
-        // Default Seed Data
+        // DEFAULT SAMPLE SEED DATA
         const DEFAULT_MEMBERS = [
             { id: "OBC101", name: "Ram Kumar Yadav", phone: "9801234567", role: "Central President", district: "Sarlahi", muni: "Malangawa", ward: "02", photo: "https://placehold.co/150x150/166534/ffffff?text=Ram+Yadav" },
             { id: "OBC102", name: "Sita Devi Mahato", phone: "9812345678", role: "Vice President", district: "Bara", muni: "Kalaiya", ward: "05", photo: "https://placehold.co/150x150/166534/ffffff?text=Sita+Mahato" },
             { id: "OBC103", name: "Dharmendra Shah", phone: "9823456789", role: "General Secretary", district: "Parsa", muni: "Birgunj", ward: "10", photo: "https://placehold.co/150x150/166534/ffffff?text=Dharmendra+Shah" }
         ];
 
-        let members = [];
+        // INDEXEDDB ENGINE (Supports 100,000+ members capacity)
+        const DB_NAME = "OBC_Kisaan_DB";
+        const DB_VERSION = 1;
+        const STORE_NAME = "members";
+        let db = null;
+
         let isAdminLoggedIn = false;
         let currentPhotoData = "";
         let currentDocData = null;
+        let currentSearchedMember = null;
 
-        window.addEventListener('DOMContentLoaded', () => {
-            initStorage();
+        // Admin Table State
+        let currentPage = 1;
+        const PAGE_SIZE = 15;
+        let filterText = "";
+        let totalRecordsCount = 0;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await initIndexedDB();
             generateQRCode();
             showSection('home');
         });
@@ -432,31 +466,115 @@
             }, 3000);
         }
 
-        // LOCAL STORAGE ENGINE
-        function initStorage() {
-            const stored = localStorage.getItem('obc_kisaan_members');
-            if (stored) {
-                try { members = JSON.parse(stored); } catch(e) { members = DEFAULT_MEMBERS; }
-            } else {
-                members = DEFAULT_MEMBERS;
-                saveStorage();
-            }
+        // INDEXEDDB INITIALIZATION & SEEDING
+        function initIndexedDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-            if (!localStorage.getItem('obc_admin_pass')) {
-                localStorage.setItem('obc_admin_pass', 'admin123');
-            }
+                request.onupgradeneeded = (e) => {
+                    db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        const store = db.createObjectStore(STORE_NAME, { keyPath: "id" });
+                        store.createIndex("phone", "phone", { unique: false });
+                        store.createIndex("name", "name", { unique: false });
+                    }
+                };
+
+                request.onsuccess = async (e) => {
+                    db = e.target.result;
+                    
+                    if (!localStorage.getItem('obc_admin_pass')) {
+                        localStorage.setItem('obc_admin_pass', 'admin123');
+                    }
+
+                    // Seed DB if empty
+                    const count = await getMemberCount();
+                    if (count === 0) {
+                        for (let m of DEFAULT_MEMBERS) {
+                            await dbSaveMember(m);
+                        }
+                    }
+                    resolve();
+                };
+
+                request.onerror = (e) => {
+                    console.error("IndexedDB initialization failed", e);
+                    showToast("Database error", "error");
+                    reject(e);
+                };
+            });
         }
 
-        function saveStorage() {
-            try {
-                localStorage.setItem('obc_kisaan_members', JSON.stringify(members));
-                renderAdminTable();
-                return true;
-            } catch(e) {
-                console.error("Storage full error", e);
-                showToast("Browser storage space full! Remove large photos or files.", "error");
-                return false;
-            }
+        // DB HELPER FUNCTIONS
+        function getMemberCount() {
+            return new Promise((resolve) => {
+                const tx = db.transaction(STORE_NAME, "readonly");
+                const store = tx.objectStore(STORE_NAME);
+                const req = store.count();
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => resolve(0);
+            });
+        }
+
+        function dbSaveMember(record) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, "readwrite");
+                const store = tx.objectStore(STORE_NAME);
+                const req = store.put(record);
+                req.onsuccess = () => resolve(true);
+                req.onerror = (e) => reject(e);
+            });
+        }
+
+        function dbGetMemberById(id) {
+            return new Promise((resolve) => {
+                const tx = db.transaction(STORE_NAME, "readonly");
+                const store = tx.objectStore(STORE_NAME);
+                const req = store.get(id.toUpperCase());
+                req.onsuccess = () => resolve(req.result || null);
+                req.onerror = () => resolve(null);
+            });
+        }
+
+        function dbDeleteMember(id) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, "readwrite");
+                const store = tx.objectStore(STORE_NAME);
+                const req = store.delete(id);
+                req.onsuccess = () => resolve(true);
+                req.onerror = (e) => reject(e);
+            });
+        }
+
+        function dbGetPaginatedMembers(page, pageSize, queryFilter = "") {
+            return new Promise((resolve) => {
+                const tx = db.transaction(STORE_NAME, "readonly");
+                const store = tx.objectStore(STORE_NAME);
+                const items = [];
+                const req = store.openCursor();
+
+                let filter = queryFilter.toLowerCase().trim();
+                let matches = [];
+
+                req.onsuccess = (e) => {
+                    const cursor = e.target.result;
+                    if (cursor) {
+                        const val = cursor.value;
+                        if (!filter || 
+                            val.id.toLowerCase().includes(filter) || 
+                            val.name.toLowerCase().includes(filter) || 
+                            val.phone.includes(filter)) {
+                            matches.push(val);
+                        }
+                        cursor.continue();
+                    } else {
+                        totalRecordsCount = matches.length;
+                        const start = (page - 1) * pageSize;
+                        const pageItems = matches.slice(start, start + pageSize);
+                        resolve({ items: pageItems, total: totalRecordsCount });
+                    }
+                };
+            });
         }
 
         function showSection(id) {
@@ -479,7 +597,7 @@
             executeMemberSearch();
         }
 
-        function executeMemberSearch() {
+        async function executeMemberSearch() {
             const query = document.getElementById('portalSearchQuery').value.trim().toUpperCase();
             const box = document.getElementById('searchResultBox');
             const cardSuccess = document.getElementById('cardSuccess');
@@ -492,7 +610,15 @@
 
             box.classList.remove('hidden');
 
-            const m = members.find(item => item.id.toUpperCase() === query || item.phone.includes(query));
+            let m = await dbGetMemberById(query);
+            
+            // Fallback search by phone if not found by ID directly
+            if (!m) {
+                const res = await dbGetPaginatedMembers(1, 1, query);
+                if (res.items.length > 0) m = res.items[0];
+            }
+
+            currentSearchedMember = m;
 
             if (m) {
                 cardNotFound.classList.add('hidden');
@@ -510,16 +636,71 @@
                 const docRow = document.getElementById('cardDocRow');
                 if (m.doc && m.doc.url) {
                     docRow.classList.remove('hidden');
-                    const link = document.getElementById('cardDocLink');
-                    link.href = m.doc.url;
-                    link.download = m.doc.name || `${m.id}_Document`;
-                    document.getElementById('cardDocName').textContent = m.doc.name || 'View Attachment';
                 } else {
                     docRow.classList.add('hidden');
                 }
             } else {
                 cardSuccess.classList.add('hidden');
                 cardNotFound.classList.remove('hidden');
+            }
+        }
+
+        // FILE VIEWING & DOWNLOADING HANDLER (Fix for Touch & Instant Open)
+        function triggerFileDownloadOrView(docObj, action = 'view') {
+            if (!docObj || !docObj.url) {
+                showToast("No attached file found", "error");
+                return;
+            }
+
+            try {
+                // Convert Data URI to Blob for universal mobile browser preview support
+                const arr = docObj.url.split(',');
+                const mimeMatch = arr[0].match(/:(.*?);/);
+                const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+                const bstr = atob(arr[1]);
+                let n = bstr.length;
+                const u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                const blob = new Blob([u8arr], { type: mime });
+                const blobUrl = URL.createObjectURL(blob);
+
+                if (action === 'view') {
+                    // Open directly in browser tab/view
+                    const newWin = window.open(blobUrl, '_blank');
+                    if (!newWin) {
+                        // Fallback if popup blocked
+                        window.location.href = blobUrl;
+                    }
+                } else {
+                    // Download file with original name
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = docObj.name || "Member_Document";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+            } catch (err) {
+                console.error("Error opening document", err);
+                // Fallback direct open
+                window.open(docObj.url, '_blank');
+            }
+        }
+
+        function openMemberDoc(action) {
+            if (currentSearchedMember && currentSearchedMember.doc) {
+                triggerFileDownloadOrView(currentSearchedMember.doc, action);
+            }
+        }
+
+        async function openAdminRowDoc(memberId, action) {
+            const m = await dbGetMemberById(memberId);
+            if (m && m.doc) {
+                triggerFileDownloadOrView(m.doc, action);
             }
         }
 
@@ -560,38 +741,76 @@
             showSection('home');
         }
 
-        function renderAdminTable() {
+        // PAGINATED ADMIN TABLE RENDER
+        async function renderAdminTable() {
             const tbody = document.getElementById('adminTableBody');
-            tbody.innerHTML = '';
-            document.getElementById('adminTotalCount').textContent = `${members.length} Members`;
+            tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Loading directory...</td></tr>`;
 
-            members.forEach(m => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50 border-b border-slate-100';
-                const docText = m.doc ? `<a href="${m.doc.url}" download="${m.doc.name}" class="text-emerald-700 font-bold hover:underline"><i class="fa-solid fa-paperclip"></i> File</a>` : '-';
-                
-                tr.innerHTML = `
-                    <td class="p-3"><img src="${m.photo || 'https://placehold.co/100x100/166534/ffffff?text=User'}" class="w-8 h-8 rounded-full object-cover border border-slate-200"></td>
-                    <td class="p-3 font-bold text-emerald-800">${m.id}</td>
-                    <td class="p-3 font-bold text-slate-800">${m.name}</td>
-                    <td class="p-3">${m.role}</td>
-                    <td class="p-3">${m.district}, ${m.muni}-${m.ward}</td>
-                    <td class="p-3 font-mono">${m.phone}</td>
-                    <td class="p-3">${docText}</td>
-                    <td class="p-3 text-center space-x-2">
-                        <button onclick="editMember('${m.id}')" class="text-blue-600 font-bold hover:underline">Edit</button>
-                        <button onclick="deleteMember('${m.id}')" class="text-red-600 font-bold hover:underline">Delete</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
+            const data = await dbGetPaginatedMembers(currentPage, PAGE_SIZE, filterText);
+            const totalCount = await getMemberCount();
+
+            document.getElementById('adminTotalCount').textContent = `${totalCount} Members`;
+            
+            tbody.innerHTML = '';
+
+            if (data.items.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">No member records found.</td></tr>`;
+            } else {
+                data.items.forEach(m => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                    const docText = m.doc ? `
+                        <div class="flex gap-1">
+                            <button onclick="openAdminRowDoc('${m.id}', 'view')" class="text-emerald-700 font-bold hover:underline"><i class="fa-solid fa-eye"></i> View</button>
+                            <span>|</span>
+                            <button onclick="openAdminRowDoc('${m.id}', 'download')" class="text-slate-600 font-bold hover:underline"><i class="fa-solid fa-download"></i> DL</button>
+                        </div>
+                    ` : '-';
+                    
+                    tr.innerHTML = `
+                        <td class="p-3"><img src="${m.photo || 'https://placehold.co/100x100/166534/ffffff?text=User'}" class="w-8 h-8 rounded-full object-cover border border-slate-200"></td>
+                        <td class="p-3 font-bold text-emerald-800">${m.id}</td>
+                        <td class="p-3 font-bold text-slate-800">${m.name}</td>
+                        <td class="p-3">${m.role}</td>
+                        <td class="p-3">${m.district}, ${m.muni}-${m.ward}</td>
+                        <td class="p-3 font-mono">${m.phone}</td>
+                        <td class="p-3">${docText}</td>
+                        <td class="p-3 text-center space-x-2">
+                            <button onclick="editMember('${m.id}')" class="text-blue-600 font-bold hover:underline">Edit</button>
+                            <button onclick="deleteMember('${m.id}')" class="text-red-600 font-bold hover:underline">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Update Pagination Bar
+            const totalPages = Math.ceil(data.total / PAGE_SIZE) || 1;
+            document.getElementById('currentPageNum').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('paginationInfo').textContent = `Showing ${data.items.length} of ${data.total} filtered records`;
+            
+            document.getElementById('btnPrevPage').disabled = currentPage <= 1;
+            document.getElementById('btnNextPage').disabled = currentPage >= totalPages;
+        }
+
+        function handleAdminTableFilter() {
+            filterText = document.getElementById('adminTableFilter').value;
+            currentPage = 1;
+            renderAdminTable();
+        }
+
+        function changeAdminPage(delta) {
+            currentPage += delta;
+            if (currentPage < 1) currentPage = 1;
+            renderAdminTable();
         }
 
         // MEMBER FORM MODAL LOGIC
-        function openAddMemberModal() {
+        async function openAddMemberModal() {
+            const count = await getMemberCount();
             document.getElementById('modalTitle').textContent = 'Add Member Record';
             document.getElementById('editOriginalId').value = '';
-            document.getElementById('mId').value = `OBC10${members.length + 1}`;
+            document.getElementById('mId').value = `OBC${100 + count + 1}`;
             document.getElementById('mId').disabled = false;
             document.getElementById('mName').value = '';
             document.getElementById('mPhone').value = '';
@@ -601,14 +820,14 @@
             document.getElementById('mWard').value = '';
             document.getElementById('mPhotoPreview').src = 'https://placehold.co/100x100/166534/ffffff?text=Photo';
             document.getElementById('mPhotoFile').value = '';
-            document.getElementById('photoStatusText').textContent = 'Auto-resizes images for instant saving speed';
+            document.getElementById('photoStatusText').textContent = 'Auto-resizes images for high capacity DB storage';
             currentPhotoData = '';
             clearAttachedDoc();
             document.getElementById('memberModal').classList.remove('hidden');
         }
 
-        function editMember(id) {
-            const m = members.find(item => item.id === id);
+        async function editMember(id) {
+            const m = await dbGetMemberById(id);
             if(!m) return;
 
             document.getElementById('modalTitle').textContent = 'Edit Member Record';
@@ -638,11 +857,11 @@
             document.getElementById('memberModal').classList.remove('hidden');
         }
 
-        function deleteMember(id) {
+        async function deleteMember(id) {
             if(confirm(`Are you sure you want to delete member ID ${id}?`)) {
-                members = members.filter(m => m.id !== id);
-                saveStorage();
+                await dbDeleteMember(id);
                 showToast(`Member ${id} deleted`);
+                renderAdminTable();
             }
         }
 
@@ -650,7 +869,7 @@
             document.getElementById('memberModal').classList.add('hidden');
         }
 
-        // CLIENT-SIDE IMAGE COMPRESSION CANVA UTILITY (Fixes Unresponsive Save)
+        // CLIENT-SIDE IMAGE COMPRESSION CANVAS UTILITY
         function handlePhotoUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -668,9 +887,8 @@
             reader.onload = function(event) {
                 const img = new Image();
                 img.onload = function() {
-                    // Create canvas for auto-resizing
                     const canvas = document.createElement('canvas');
-                    const maxDim = 800; // max resolution dimension
+                    const maxDim = 800;
                     let width = img.width;
                     let height = img.height;
 
@@ -691,7 +909,6 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Compress to JPEG with 0.8 quality
                     currentPhotoData = canvas.toDataURL('image/jpeg', 0.8);
                     document.getElementById('mPhotoPreview').src = currentPhotoData;
                     statusText.textContent = "Compressed and ready";
@@ -727,16 +944,16 @@
             document.getElementById('mDocPreviewBadge').classList.add('hidden');
         }
 
-        // INSTANT NON-BLOCKING FORM SAVE HANDLER
-        function saveMemberForm(e) {
+        // FORM SAVE HANDLER WITH INDEXEDDB
+        async function saveMemberForm(e) {
             e.preventDefault();
 
             const btn = document.getElementById('saveMemberBtn');
             const btnText = document.getElementById('saveBtnText');
             btn.disabled = true;
-            btnText.textContent = "Saving...";
+            btnText.textContent = "Saving to DB...";
 
-            setTimeout(() => {
+            try {
                 const origId = document.getElementById('editOriginalId').value;
                 const newId = document.getElementById('mId').value.trim().toUpperCase();
 
@@ -752,23 +969,20 @@
                     doc: currentDocData
                 };
 
-                if (origId) {
-                    const idx = members.findIndex(m => m.id === origId);
-                    if (idx !== -1) members[idx] = record;
-                } else {
-                    members.push(record);
-                }
+                await dbSaveMember(record);
 
-                const success = saveStorage();
-                
                 btn.disabled = false;
                 btnText.textContent = "Save Member";
 
-                if (success) {
-                    showToast(origId ? "Member updated successfully!" : "New member saved successfully!");
-                    closeMemberModal();
-                }
-            }, 50);
+                showToast(origId ? "Member updated successfully!" : "New member saved to IndexedDB!");
+                closeMemberModal();
+                renderAdminTable();
+            } catch (err) {
+                console.error("Save error", err);
+                showToast("Failed to save member record", "error");
+                btn.disabled = false;
+                btnText.textContent = "Save Member";
+            }
         }
 
         // PASSWORD MODAL
