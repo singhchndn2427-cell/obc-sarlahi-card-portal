@@ -1,111 +1,1110 @@
-Website Name
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nepal OBC Kisaan Mahasangh | नेपाल ओबीसी किसान महासंघ</title>
 
-Nepal OBC Kisaan Mahasangh
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        agri: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16'
+                        },
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-Create a professional, mobile-friendly website that works directly in Google Chrome and other web browsers on both iPhone and Android.
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-1. Admin Login & Security
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', 'Mukta', sans-serif;
+        }
 
-* Only the Admin can access the member-management section.
-* Admin login must be protected with a password.
-* Only Admin can:
-    * Add new members
-    * Edit member information
-    * Delete members
-    * Change the Admin password
-    * Upload or change member photos
-* Normal visitors must not be able to access or see the Admin password or member-management controls.
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableArea, #printableArea * {
+                visibility: visible;
+            }
+            #printableArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
-2. Add Member
+    <!-- TOP ANNOUNCEMENT BANNER -->
+    <div class="bg-agri-950 text-gold-400 text-xs py-1.5 px-4 font-medium border-b border-agri-800 flex justify-between items-center no-print">
+        <div class="flex items-center space-x-2 truncate">
+            <i class="fa-solid fa-wheat-awn text-gold-500"></i>
+            <span class="truncate">Official Verification Portal • Nepal OBC Kisaan Mahasangh (नेपाल ओबीसी किसान महासंघ)</span>
+        </div>
+        <div class="flex items-center space-x-3 text-white text-xs flex-shrink-0">
+            <button onclick="openQrModal()" class="hover:text-gold-400 transition flex items-center space-x-1">
+                <i class="fa-solid fa-qrcode text-gold-500"></i>
+                <span class="hidden sm:inline">QR Portal</span>
+            </button>
+            <span class="text-agri-700">|</span>
+            <span id="navAdminStatus" class="text-emerald-400 font-semibold hidden flex items-center space-x-1">
+                <i class="fa-solid fa-shield-check text-emerald-400"></i>
+                <span class="hidden sm:inline">Admin Session Active</span>
+            </span>
+        </div>
+    </div>
 
-Create an “Add Member” option available only after Admin login.
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Branding -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="showPage('home')">
+                    <div class="w-12 h-12 bg-agri-900 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-md border-2 border-gold-500 flex-shrink-0">
+                        <i class="fa-solid fa-seedling text-gold-500 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-extrabold text-agri-950 leading-tight">Nepal OBC Kisaan Mahasangh</h1>
+                        <p class="text-xs text-agri-700 font-bold">नेपाल ओबीसी किसान महासंघ</p>
+                    </div>
+                </div>
 
-When adding a member, include fields such as:
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 font-medium text-sm">
+                    <button onclick="showPage('home')" class="nav-link px-3 py-2 rounded-xl hover:bg-agri-50 hover:text-agri-800 text-slate-700 transition" id="nav-home">
+                        <i class="fa-solid fa-house mr-1 text-agri-700"></i> Home
+                    </button>
+                    <button onclick="showPage('about')" class="nav-link px-3 py-2 rounded-xl hover:bg-agri-50 hover:text-agri-800 text-slate-700 transition" id="nav-about">
+                        <i class="fa-solid fa-landmark mr-1 text-agri-700"></i> About Us
+                    </button>
+                    <button onclick="showPage('search')" class="nav-link px-3 py-2 rounded-xl hover:bg-agri-50 hover:text-agri-800 text-slate-700 transition" id="nav-search">
+                        <i class="fa-solid fa-magnifying-glass-location mr-1 text-agri-700"></i> Member Search
+                    </button>
+                    <button onclick="showPage('contact')" class="nav-link px-3 py-2 rounded-xl hover:bg-agri-50 hover:text-agri-800 text-slate-700 transition" id="nav-contact">
+                        <i class="fa-solid fa-envelope mr-1 text-agri-700"></i> Contact
+                    </button>
+                    
+                    <!-- Admin Button -->
+                    <button id="navAdminBtn" onclick="handleAdminNavClick()" class="ml-2 bg-agri-900 text-white px-4 py-2 rounded-xl hover:bg-agri-800 transition flex items-center shadow-sm">
+                        <i class="fa-solid fa-user-shield mr-2 text-gold-400"></i>
+                        <span id="navAdminText">Admin Portal</span>
+                    </button>
+                </nav>
 
-* Member ID (example: OBC123)
-* Full Name
-* Address
-* District
-* Municipality/Rural Municipality
-* Ward No.
-* Phone Number
-* Position/Role
-* Member photo
+                <!-- Mobile Navigation Toggle -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-slate-700 hover:text-agri-800 p-2 rounded-xl focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-Allow the Admin to upload a member photo with a maximum file size of 5 MB.
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="showPage('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-agri-50"><i class="fa-solid fa-house w-6 text-agri-700"></i> Home</button>
+            <button onclick="showPage('about'); toggleMobileMenu();" class="block w-full text-left px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-agri-50"><i class="fa-solid fa-landmark w-6 text-agri-700"></i> About Us</button>
+            <button onclick="showPage('search'); toggleMobileMenu();" class="block w-full text-left px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-agri-50"><i class="fa-solid fa-magnifying-glass-location w-6 text-agri-700"></i> Member Search</button>
+            <button onclick="showPage('contact'); toggleMobileMenu();" class="block w-full text-left px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-agri-50"><i class="fa-solid fa-envelope w-6 text-agri-700"></i> Contact</button>
+            <button onclick="handleAdminNavClick(); toggleMobileMenu();" class="block w-full text-left px-3 py-2.5 rounded-xl font-semibold text-white bg-agri-900"><i class="fa-solid fa-user-shield w-6 text-gold-400"></i> <span id="mobileAdminText">Admin Portal</span></button>
+        </div>
+    </header>
 
-3. Member Search
+    <!-- MAIN APP VIEW CONTAINER -->
+    <main class="flex-grow">
+        
+        <!-- 1. HOME PAGE -->
+        <section id="page-home" class="page-section">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-br from-agri-950 via-agri-900 to-agri-800 text-white py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#eab308_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                
+                <div class="max-w-5xl mx-auto text-center relative z-10">
+                    <span class="inline-flex items-center gap-1.5 bg-gold-500/20 text-gold-400 text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-gold-500/30 mb-4">
+                        <i class="fa-solid fa-shield-halved"></i> Official Registry & Verification Portal
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">Nepal OBC Kisaan Mahasangh</h2>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gold-400 mb-6 font-mukta">नेपाल ओबीसी किसान महासंघ</h3>
+                    
+                    <p class="text-agri-100 text-sm sm:text-lg font-light max-w-3xl mx-auto mb-10 leading-relaxed">
+                        Dedicated to protecting agricultural rights, empowering farmers from Other Backward Classes, and accelerating sustainable farming across all provinces of Nepal.
+                    </p>
 
-Add a prominent Search Member box on the website.
+                    <!-- Interactive Quick Search Bar -->
+                    <div class="max-w-2xl mx-auto bg-white p-4 sm:p-5 rounded-3xl shadow-2xl text-slate-800 border border-slate-100">
+                        <label class="block text-left text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">
+                            <i class="fa-solid fa-id-card text-agri-700 mr-1"></i> Verify Member ID or Phone Number
+                        </label>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <div class="relative flex-grow">
+                                <input type="text" id="homeSearchInput" placeholder="Enter ID (e.g. OBC101) or Phone" class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-2xl focus:ring-2 focus:ring-agri-600 focus:border-agri-600 outline-none font-semibold text-slate-800 uppercase">
+                                <i class="fa-solid fa-hashtag absolute left-3.5 top-4 text-slate-400"></i>
+                            </div>
+                            <button onclick="executeSearchFromHome()" class="bg-agri-800 hover:bg-agri-900 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center justify-center space-x-2 shadow-md">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span>Search</span>
+                            </button>
+                        </div>
 
-Example:
+                        <!-- Sample Quick Links -->
+                        <div class="flex flex-wrap items-center justify-between text-xs text-slate-500 mt-3 px-1 gap-2">
+                            <span>Sample Records: 
+                                <a href="javascript:void(0)" onclick="quickSearch('OBC101')" class="text-agri-700 hover:underline font-bold">OBC101</a>, 
+                                <a href="javascript:void(0)" onclick="quickSearch('OBC102')" class="text-agri-700 hover:underline font-bold">OBC102</a>, 
+                                <a href="javascript:void(0)" onclick="quickSearch('OBC103')" class="text-agri-700 hover:underline font-bold">OBC103</a>
+                            </span>
+                            <span class="text-emerald-700 font-semibold flex items-center">
+                                <i class="fa-solid fa-circle-check mr-1"></i> Live Database
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-* A person types OBC123
-* The website searches the member database
-* If the ID exists, show the corresponding member’s information and photo.
-* If the ID does not exist, display “Member not found.”
+            <!-- Statistics Counters -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+                        <div class="text-3xl font-black text-agri-800" id="statMembersCount">0</div>
+                        <div class="text-xs text-slate-500 font-semibold uppercase mt-1">Registered Members</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+                        <div class="text-3xl font-black text-agri-800">77</div>
+                        <div class="text-xs text-slate-500 font-semibold uppercase mt-1">Districts Covered</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+                        <div class="text-3xl font-black text-agri-800">7</div>
+                        <div class="text-xs text-slate-500 font-semibold uppercase mt-1">Provinces Active</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
+                        <div class="text-3xl font-black text-agri-800">100%</div>
+                        <div class="text-xs text-slate-500 font-semibold uppercase mt-1">Digital Verification</div>
+                    </div>
+                </div>
+            </div>
 
-The search should be fast and work well on mobile phones.
+            <!-- Core Pillars Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <h3 class="text-2xl font-extrabold text-slate-900">Key Organizational Objectives</h3>
+                    <p class="text-slate-600 text-sm mt-1">Empowerment, advocacy, and direct support for rural agriculture communities.</p>
+                </div>
 
-4. Member Information Page
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-agri-100 text-agri-800 rounded-2xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-hand-holding-hand"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-lg">Farmer Rights & Subsidies</h4>
+                            <p class="text-slate-600 text-sm mt-2">Facilitating smooth access to governmental fertilizers, seeds, machinery, and agricultural credit.</p>
+                        </div>
+                    </div>
 
-When a valid Member ID is found, display the member’s registered information in a clean ID/profile format.
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-gold-500/10 text-gold-700 rounded-2xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-lg">Digital Membership Cards</h4>
+                            <p class="text-slate-600 text-sm mt-2">Providing official QR-coded member profiles to confirm legitimate union leadership and active membership.</p>
+                        </div>
+                    </div>
 
-Example:
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-2xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-wheat-awn-circle-exclamation"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-lg">Agrarian Innovation</h4>
+                            <p class="text-slate-600 text-sm mt-2">Organizing training workshops on modern sustainable irrigation, crop rotation, and market pricing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-Member ID: OBC123
-Name: [Member Name]
-District: [District]
-Municipality: [Municipality]
-Ward: [Ward]
-Position: [Position]
-Photo: [Member Photo]
+        <!-- 2. ABOUT US PAGE -->
+        <section id="page-about" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <span class="text-agri-700 text-xs font-bold tracking-wider uppercase">Organizational Profile</span>
+                        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">About Nepal OBC Kisaan Mahasangh</h2>
+                        <h3 class="text-lg font-bold text-agri-800 font-mukta">हाम्रो संस्थागत परिचय</h3>
+                    </div>
+                    <span class="mt-2 md:mt-0 bg-agri-50 text-agri-800 font-bold px-4 py-1.5 rounded-full text-xs border border-agri-200">
+                        Registered Federation
+                    </span>
+                </div>
 
-5. QR Code
+                <div class="prose max-w-none text-slate-700 space-y-6 leading-relaxed">
+                    <p class="text-base sm:text-lg">
+                        <strong>Nepal OBC Kisaan Mahasangh (नेपाल ओबीसी किसान महासंघ)</strong> is an autonomous non-governmental representative body formed to safeguard, unite, and represent farmers belonging to Other Backward Classes (OBC) and agrarian families across Nepal.
+                    </p>
 
-Create a QR Code that contains the website address.
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                            <h4 class="text-lg font-bold text-agri-900 mb-2 flex items-center">
+                                <i class="fa-solid fa-bullseye text-gold-600 mr-2"></i> Mission Statement
+                            </h4>
+                            <p class="text-sm text-slate-600">
+                                To champion fair crop pricing, timely supply of fertilizers, modernized agricultural infrastructure, and institutional dignity for every OBC farmer.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                            <h4 class="text-lg font-bold text-agri-900 mb-2 flex items-center">
+                                <i class="fa-solid fa-eye text-gold-600 mr-2"></i> Strategic Vision
+                            </h4>
+                            <p class="text-sm text-slate-600">
+                                A prosperous, resilient Nepal where agricultural workers hold central socio-economic empowerment and equitable governance representation.
+                            </p>
+                        </div>
+                    </div>
 
-When someone scans the QR code using their phone camera:
+                    <h4 class="text-lg font-bold text-slate-900 border-l-4 border-agri-700 pl-3">District Leadership & Representation</h4>
+                    <p class="text-sm">
+                        Our organizational hierarchy operates across Central, Provincial, District, and Municipal levels. Through this verification portal, local officials and the general public can instantly verify active committee members and office bearers.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-1. The phone recognizes the QR code.
-2. They tap the link.
-3. The website opens directly in Chrome/browser.
-4. They can immediately use the Member Search feature.
+        <!-- 3. MEMBER SEARCH PAGE -->
+        <section id="page-search" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200 mb-8">
+                <div class="text-center max-w-xl mx-auto">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-agri-100 text-agri-800 rounded-2xl mb-3">
+                        <i class="fa-solid fa-id-card-clip text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Member Verification Portal</h2>
+                    <p class="text-slate-600 text-sm mt-1">Enter a registered Member ID or Phone number to view verified profile credentials.</p>
+                </div>
 
-Also provide an Admin option to download/print the QR code.
+                <div class="mt-6 max-w-xl mx-auto">
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="portalSearchInput" placeholder="Enter ID (e.g. OBC101) or Phone" class="w-full px-4 py-3 border border-slate-300 rounded-2xl focus:ring-2 focus:ring-agri-600 outline-none font-bold text-lg text-slate-800 uppercase">
+                        <button onclick="performPortalSearch()" class="bg-agri-800 hover:bg-agri-900 text-white font-bold px-8 py-3 rounded-2xl transition shadow">
+                            Verify Now
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-6. Website Pages
+            <!-- RESULT DISPLAY AREA -->
+            <div id="searchResultArea" class="hidden">
+                <!-- SUCCESS DIGITAL ID CARD -->
+                <div id="memberFoundCard" class="hidden max-w-md mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200 relative">
+                    
+                    <!-- ID CARD TOP HEADER -->
+                    <div class="bg-agri-950 text-white p-5 text-center relative border-b-4 border-gold-500">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2 text-left">
+                                <div class="w-8 h-8 bg-agri-800 rounded-lg flex items-center justify-center text-gold-400 font-bold border border-gold-500">
+                                    <i class="fa-solid fa-seedling"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-[10px] uppercase font-black text-gold-400 tracking-wider">Nepal OBC Kisaan Mahasangh</h4>
+                                    <p class="text-[9px] text-agri-200">Official Membership Identification</p>
+                                </div>
+                            </div>
+                            <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase flex items-center">
+                                <i class="fa-solid fa-shield-check mr-1"></i> Verified
+                            </span>
+                        </div>
+                    </div>
 
-Include:
+                    <!-- CARD CONTENT BODY -->
+                    <div class="p-6">
+                        <div class="flex flex-col items-center text-center">
+                            <!-- Photo -->
+                            <div class="relative w-32 h-32 rounded-full border-4 border-slate-100 shadow-md overflow-hidden mb-4 bg-slate-100">
+                                <img id="resMemberPhoto" src="" alt="Member Photo" class="w-full h-full object-cover">
+                            </div>
+                            
+                            <h3 id="resMemberName" class="text-2xl font-extrabold text-slate-900">--</h3>
+                            <span id="resMemberPosition" class="inline-block bg-agri-100 text-agri-900 font-bold px-3 py-1 rounded-xl text-xs mt-1 mb-4">
+                                --
+                            </span>
 
-* Home
-* About Nepal OBC Kisaan Mahasangh
-* Member Search
-* Member Information
-* Contact
-* Admin Login
-* Admin Dashboard
+                            <!-- Member ID Badge -->
+                            <div class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 mb-4 text-center">
+                                <span class="text-[11px] text-slate-500 uppercase font-bold block">Registration Code</span>
+                                <span id="resMemberId" class="text-2xl font-black text-agri-800 tracking-widest">--</span>
+                            </div>
 
-7. Design
+                            <!-- Details Table -->
+                            <div class="w-full text-left space-y-2 text-xs sm:text-sm border-t border-slate-100 pt-4">
+                                <div class="flex justify-between py-1.5 border-b border-slate-50">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-map-pin w-5 text-agri-700"></i> District:</span>
+                                    <span id="resMemberDistrict" class="font-bold text-slate-800">--</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-50">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-building-columns w-5 text-agri-700"></i> Local Body:</span>
+                                    <span id="resMemberMuni" class="font-bold text-slate-800">--</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-50">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-hashtag w-5 text-agri-700"></i> Ward No:</span>
+                                    <span id="resMemberWard" class="font-bold text-slate-800">--</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-50">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-phone w-5 text-agri-700"></i> Phone:</span>
+                                    <span id="resMemberPhone" class="font-bold text-slate-800">--</span>
+                                </div>
+                            </div>
+                        </div>
 
-Use a professional, clean and trustworthy design suitable for an organization.
+                        <!-- Print Action -->
+                        <div class="mt-6">
+                            <button onclick="printMemberCard()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl transition text-xs flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-print"></i>
+                                <span>Print Official Profile</span>
+                            </button>
+                        </div>
+                    </div>
 
-Requirements:
+                    <!-- CARD FOOTER -->
+                    <div class="bg-slate-50 px-5 py-2.5 text-center text-[10px] text-slate-400 border-t border-slate-100 font-medium">
+                        Nepal OBC Kisaan Mahasangh Secretariat • Digitally Signed Record
+                    </div>
+                </div>
 
-* Fully responsive for iPhone, Android, tablet and computer.
-* Easy-to-use search box.
-* Clear navigation menu.
-* Fast loading.
-* Secure database.
-* HTTPS/SSL.
-* Member information should only show information that the organization intends to make publicly searchable.
+                <!-- MEMBER NOT FOUND EMPTY STATE -->
+                <div id="memberNotFound" class="hidden max-w-md mx-auto bg-white rounded-3xl p-8 text-center border border-slate-200 shadow-sm">
+                    <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                        <i class="fa-solid fa-user-xmark"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">Member Not Found</h3>
+                    <p class="text-xs text-slate-600 mb-6">No matching active record was found in the OBC Kisaan Mahasangh registry.</p>
+                    <button onclick="document.getElementById('portalSearchInput').focus()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-4 py-2 rounded-xl text-xs transition">
+                        Try Another Search
+                    </button>
+                </div>
+            </div>
+        </section>
 
-8. Important Security Requirement
+        <!-- 4. CONTACT US PAGE -->
+        <section id="page-contact" class="page-section hidden py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200">
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Central Contact Secretariat</h2>
+                <p class="text-slate-600 text-sm mb-8">Reach out for organizational inquiries, local committee registration, or assistance.</p>
 
-Do not store the Admin password in the website’s visible frontend code. Use secure server-side authentication and password hashing.
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-agri-100 text-agri-800 rounded-xl flex items-center justify-center flex-shrink-0 font-bold">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Central Secretariat</h4>
+                                <p class="text-xs text-slate-600 mt-0.5">Kathmandu / Malangawa Office, Nepal</p>
+                            </div>
+                        </div>
 
-The member database and Admin dashboard must be protected so that ordinary visitors cannot add, edit or delete members.
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-agri-100 text-agri-800 rounded-xl flex items-center justify-center flex-shrink-0 font-bold">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Official Helpline</h4>
+                                <p class="text-xs text-slate-600 mt-0.5">+977-9801234567 / +977-9812345678</p>
+                            </div>
+                        </div>
 
-Main Goal
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-agri-100 text-agri-800 rounded-xl flex items-center justify-center flex-shrink-0 font-bold">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Email Inquiries</h4>
+                                <p class="text-xs text-slate-600 mt-0.5">info@nepalobckisaan.org.np</p>
+                            </div>
+                        </div>
+                    </div>
 
-The final website should allow the organization to maintain its member database securely. Visitors can open the website through Chrome, enter a Member ID such as OBC123, and quickly see the corresponding registered member information. A QR code should provide an easy way to open the website.
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm mb-4">Send Direct Message</h4>
+                        <div class="space-y-3">
+                            <input type="text" placeholder="Full Name" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600">
+                            <input type="text" placeholder="Phone Number" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600">
+                            <textarea rows="3" placeholder="Message details..." class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600"></textarea>
+                            <button onclick="alert('Message submitted successfully.')" class="w-full bg-agri-800 hover:bg-agri-900 text-white font-bold py-2.5 rounded-xl text-xs transition">
+                                Send Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ADMIN DASHBOARD PAGE -->
+        <section id="page-admin" class="page-section hidden py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            
+            <!-- ADMIN LOGIN FORM (Unauthenticated View) -->
+            <div id="adminLoginForm" class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-xl border border-slate-200 my-8">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 bg-agri-950 text-gold-400 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow">
+                        <i class="fa-solid fa-user-shield text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Admin Authentication</h2>
+                    <p class="text-xs text-slate-500 mt-1">Management Portal Access</p>
+                </div>
+
+                <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Admin Password</label>
+                        <div class="relative">
+                            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-agri-600 outline-none text-slate-800 text-sm" required>
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">Default Password: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700 font-bold">admin123</code></p>
+                    </div>
+
+                    <div id="loginErrorMessage" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid password. Please try again.
+                    </div>
+
+                    <button type="submit" class="w-full bg-agri-800 hover:bg-agri-900 text-white font-bold py-3 rounded-xl transition shadow text-sm">
+                        Access Admin Dashboard
+                    </button>
+                </form>
+            </div>
+
+            <!-- ADMIN DASHBOARD PANEL (Authenticated View) -->
+            <div id="adminDashboard" class="hidden space-y-6">
+                
+                <!-- Dashboard Header Bar -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                            Admin Session Active
+                        </span>
+                        <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Member Database Control Panel</h2>
+                        <p class="text-xs text-slate-500">Manage registered officers, upload photos, and update details.</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="openAddMemberModal()" class="bg-agri-800 hover:bg-agri-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition shadow flex items-center">
+                            <i class="fa-solid fa-user-plus mr-2"></i> Add New Member
+                        </button>
+                        <button onclick="exportDataJSON()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2.5 rounded-xl text-xs transition">
+                            <i class="fa-solid fa-file-export mr-1"></i> Export Data
+                        </button>
+                        <button onclick="openChangePasswordModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2.5 rounded-xl text-xs transition">
+                            <i class="fa-solid fa-key mr-1"></i> Password
+                        </button>
+                        <button onclick="handleAdminLogout()" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold px-3 py-2.5 rounded-xl text-xs transition border border-red-200">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Admin Table Filter Bar -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="relative w-full sm:w-80">
+                        <input type="text" id="adminTableSearch" onkeyup="filterAdminTable()" placeholder="Filter members..." class="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-xl text-xs outline-none focus:border-agri-600">
+                        <i class="fa-solid fa-filter absolute left-3 top-3 text-slate-400 text-xs"></i>
+                    </div>
+
+                    <div class="text-xs text-slate-600 font-bold">
+                        Total Records: <span id="adminTotalCount" class="font-black text-agri-800 bg-agri-100 px-2.5 py-0.5 rounded-full border border-agri-200">0</span>
+                    </div>
+                </div>
+
+                <!-- Members Data Table -->
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
+                                <tr>
+                                    <th class="p-4">Photo</th>
+                                    <th class="p-4">Member ID</th>
+                                    <th class="p-4">Full Name</th>
+                                    <th class="p-4">Position / Role</th>
+                                    <th class="p-4">District / Location</th>
+                                    <th class="p-4">Phone</th>
+                                    <th class="p-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminMembersTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ADD / EDIT MEMBER MODAL -->
+    <div id="memberModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative my-8 border border-slate-100">
+            <button onclick="closeMemberModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <h3 id="modalTitle" class="text-2xl font-extrabold text-slate-900 mb-4">Add New Member</h3>
+
+            <form onsubmit="saveMemberForm(event)" class="space-y-4">
+                <input type="hidden" id="editOriginalId">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Member ID *</label>
+                        <input type="text" id="formMemberId" placeholder="e.g. OBC105" class="w-full px-3 py-2 border rounded-xl text-xs uppercase font-bold outline-none focus:border-agri-600" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Full Name *</label>
+                        <input type="text" id="formFullName" placeholder="Full Name" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Phone Number *</label>
+                        <input type="text" id="formPhone" placeholder="Mobile Number" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Position / Role *</label>
+                        <input type="text" id="formPosition" placeholder="e.g. District Committee Member" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">District *</label>
+                        <input type="text" id="formDistrict" placeholder="e.g. Siraha" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Municipality *</label>
+                        <input type="text" id="formMuni" placeholder="e.g. Lahan" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Ward No. *</label>
+                        <input type="text" id="formWard" placeholder="e.g. 04" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600" required>
+                    </div>
+                </div>
+
+                <!-- Photo Upload with Max 5MB Validation -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Member Photo (Max 5MB)</label>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 rounded-full border border-slate-200 overflow-hidden bg-slate-50 flex-shrink-0">
+                            <img id="formPhotoPreview" src="https://placehold.co/150x150/166534/ffffff?text=Photo" class="w-full h-full object-cover">
+                        </div>
+                        <input type="file" id="formPhotoFile" accept="image/*" onchange="handlePhotoUpload(event)" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-agri-50 file:text-agri-800 hover:file:bg-agri-100">
+                    </div>
+                    <p id="fileError" class="text-xs text-red-600 mt-1 hidden"></p>
+                </div>
+
+                <div class="pt-4 flex justify-end space-x-2 border-t border-slate-100">
+                    <button type="button" onclick="closeMemberModal()" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-bold">Cancel</button>
+                    <button type="submit" class="bg-agri-800 hover:bg-agri-900 text-white font-bold px-6 py-2 rounded-xl text-xs shadow">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CHANGE ADMIN PASSWORD MODAL -->
+    <div id="passwordModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100">
+            <button onclick="closePasswordModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <h3 class="text-xl font-extrabold text-slate-900 mb-4">Update Admin Password</h3>
+
+            <form onsubmit="saveNewPassword(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">New Password</label>
+                    <input type="password" id="newAdminPassword" class="w-full px-3 py-2 border rounded-xl text-xs outline-none focus:border-agri-600" required>
+                </div>
+                <button type="submit" class="w-full bg-agri-800 hover:bg-agri-900 text-white font-bold py-2.5 rounded-xl text-xs shadow">
+                    Update Password
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR CODE MODAL -->
+    <div id="qrModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center relative border border-slate-100">
+            <button onclick="closeQrModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="w-10 h-10 bg-gold-500/10 text-gold-700 rounded-full flex items-center justify-center mx-auto mb-2">
+                <i class="fa-solid fa-qrcode text-lg"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-slate-900">Portal QR Code</h3>
+            <p class="text-xs text-slate-500 mb-4">Scan using any mobile camera to open this verification system.</p>
+
+            <div id="qrcode" class="p-3 bg-white border border-slate-200 rounded-2xl flex justify-center mb-4"></div>
+
+            <button onclick="window.print()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-xl text-xs transition">
+                <i class="fa-solid fa-print mr-1"></i> Print / Download Banner
+            </button>
+        </div>
+    </div>
+
+    <!-- PRINTABLE CONTAINER -->
+    <div id="printableArea" class="hidden"></div>
+
+    <script>
+        // PRE-POPULATED SAMPLE MEMBERS
+        const DEFAULT_MEMBERS = [
+            {
+                id: "OBC101",
+                name: "Ram Kumar Yadav",
+                phone: "9801234567",
+                position: "Central President",
+                district: "Sarlahi",
+                muni: "Malangawa",
+                ward: "02",
+                photo: "https://placehold.co/150x150/166534/ffffff?text=Ram+Yadav"
+            },
+            {
+                id: "OBC102",
+                name: "Sita Devi Mahato",
+                phone: "9812345678",
+                position: "Vice President",
+                district: "Bara",
+                muni: "Kalaiya",
+                ward: "05",
+                photo: "https://placehold.co/150x150/166534/ffffff?text=Sita+Mahato"
+            },
+            {
+                id: "OBC103",
+                name: "Dharmendra Shah",
+                phone: "9823456789",
+                position: "General Secretary",
+                district: "Parsa",
+                muni: "Birgunj",
+                ward: "10",
+                photo: "https://placehold.co/150x150/166534/ffffff?text=Dharmendra+Shah"
+            },
+            {
+                id: "OBC104",
+                name: "Anil Kumar Mandal",
+                phone: "9834567890",
+                position: "District Coordinator",
+                district: "Siraha",
+                muni: "Lahan",
+                ward: "04",
+                photo: "https://placehold.co/150x150/166534/ffffff?text=Anil+Mandal"
+            },
+            {
+                id: "OBC105",
+                name: "Sunita Chaudhary",
+                phone: "9845678901",
+                position: "Treasurer",
+                district: "Morang",
+                muni: " विराटनगर (Biratnagar)",
+                ward: "03",
+                photo: "https://placehold.co/150x150/166534/ffffff?text=Sunita+Ch"
+            }
+        ];
+
+        // STATE
+        let membersData = [];
+        let isAdminLoggedIn = false;
+        let currentUploadedPhoto = "";
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            initStorage();
+            generateWebsiteQRCode();
+            showPage('home');
+        });
+
+        function initStorage() {
+            const stored = localStorage.getItem('obc_kisaan_members');
+            if (stored) {
+                try {
+                    membersData = JSON.parse(stored);
+                } catch(e) {
+                    membersData = DEFAULT_MEMBERS;
+                }
+            } else {
+                membersData = DEFAULT_MEMBERS;
+                localStorage.setItem('obc_kisaan_members', JSON.stringify(membersData));
+            }
+
+            if (!localStorage.getItem('obc_admin_pass')) {
+                localStorage.setItem('obc_admin_pass', 'admin123');
+            }
+
+            updateDashboardStats();
+        }
+
+        function saveMembersToStorage() {
+            localStorage.setItem('obc_kisaan_members', JSON.stringify(membersData));
+            renderAdminTable();
+            updateDashboardStats();
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('statMembersCount').textContent = membersData.length;
+        }
+
+        // NAVIGATION ROUTER
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        // MEMBER SEARCH ENGINE
+        function executeSearchFromHome() {
+            const query = document.getElementById('homeSearchInput').value.trim();
+            if(!query) return;
+            showPage('search');
+            document.getElementById('portalSearchInput').value = query;
+            performPortalSearch();
+        }
+
+        function quickSearch(id) {
+            document.getElementById('homeSearchInput').value = id;
+            executeSearchFromHome();
+        }
+
+        function performPortalSearch() {
+            const query = document.getElementById('portalSearchInput').value.trim().toUpperCase();
+            const resultArea = document.getElementById('searchResultArea');
+            const foundCard = document.getElementById('memberFoundCard');
+            const notFound = document.getElementById('memberNotFound');
+
+            resultArea.classList.remove('hidden');
+
+            if (!query) {
+                foundCard.classList.add('hidden');
+                notFound.classList.add('hidden');
+                return;
+            }
+
+            // Search by Member ID or Phone
+            const member = membersData.find(m => m.id.toUpperCase() === query || m.phone.includes(query));
+
+            if (member) {
+                notFound.classList.add('hidden');
+                foundCard.classList.remove('hidden');
+
+                document.getElementById('resMemberId').textContent = member.id;
+                document.getElementById('resMemberName').textContent = member.name;
+                document.getElementById('resMemberPosition').textContent = member.position;
+                document.getElementById('resMemberDistrict').textContent = member.district;
+                document.getElementById('resMemberMuni').textContent = member.muni;
+                document.getElementById('resMemberWard').textContent = member.ward;
+                document.getElementById('resMemberPhone').textContent = member.phone;
+                document.getElementById('resMemberPhoto').src = member.photo || 'https://placehold.co/150x150/166534/ffffff?text=Member';
+            } else {
+                foundCard.classList.add('hidden');
+                notFound.classList.remove('hidden');
+            }
+        }
+
+        function printMemberCard() {
+            const cardHtml = document.getElementById('memberFoundCard').innerHTML;
+            const printArea = document.getElementById('printableArea');
+            printArea.innerHTML = `<div style="max-width:400px; margin:20px auto; font-family:sans-serif;">${cardHtml}</div>`;
+            window.print();
+        }
+
+        // ADMIN AUTHENTICATION
+        function handleAdminNavClick() {
+            showPage('admin');
+            if (isAdminLoggedIn) {
+                document.getElementById('adminLoginForm').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                renderAdminTable();
+            } else {
+                document.getElementById('adminLoginForm').classList.remove('hidden');
+                document.getElementById('adminDashboard').classList.add('hidden');
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const enteredPass = document.getElementById('adminPasswordInput').value;
+            const savedPass = localStorage.getItem('obc_admin_pass') || 'admin123';
+
+            if (enteredPass === savedPass) {
+                isAdminLoggedIn = true;
+                document.getElementById('loginErrorMessage').classList.add('hidden');
+                document.getElementById('adminPasswordInput').value = '';
+                
+                document.getElementById('navAdminStatus').classList.remove('hidden');
+                document.getElementById('navAdminText').textContent = "Dashboard";
+                document.getElementById('mobileAdminText').textContent = "Dashboard";
+
+                handleAdminNavClick();
+            } else {
+                document.getElementById('loginErrorMessage').classList.remove('hidden');
+            }
+        }
+
+        function handleAdminLogout() {
+            isAdminLoggedIn = false;
+            document.getElementById('navAdminStatus').classList.add('hidden');
+            document.getElementById('navAdminText').textContent = "Admin Portal";
+            document.getElementById('mobileAdminText').textContent = "Admin Portal";
+            showPage('home');
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('adminPasswordInput');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // ADMIN TABLE CRUD
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminMembersTableBody');
+            tbody.innerHTML = '';
+
+            document.getElementById('adminTotalCount').textContent = membersData.length;
+
+            membersData.forEach(m => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+                tr.innerHTML = `
+                    <td class="p-3">
+                        <img src="${m.photo || 'https://placehold.co/150x150/166534/ffffff?text=Member'}" class="w-10 h-10 rounded-full object-cover border border-slate-200">
+                    </td>
+                    <td class="p-3 font-bold text-agri-800">${m.id}</td>
+                    <td class="p-3 font-semibold text-slate-900">${m.name}</td>
+                    <td class="p-3"><span class="bg-slate-100 px-2 py-1 rounded text-xs font-semibold text-slate-700">${m.position}</span></td>
+                    <td class="p-3 text-xs">${m.district}, ${m.muni}-${m.ward}</td>
+                    <td class="p-3 text-xs font-mono">${m.phone}</td>
+                    <td class="p-3 text-center space-x-1">
+                        <button onclick="openEditMemberModal('${m.id}')" class="text-blue-600 hover:text-blue-800 p-1.5 rounded-lg hover:bg-blue-50" title="Edit">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteMember('${m.id}')" class="text-red-600 hover:text-red-800 p-1.5 rounded-lg hover:bg-red-50" title="Delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterAdminTable() {
+            const filter = document.getElementById('adminTableSearch').value.toUpperCase();
+            const rows = document.querySelectorAll('#adminMembersTableBody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toUpperCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
+        }
+
+        // ADD / EDIT FORM
+        function openAddMemberModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Member';
+            document.getElementById('editOriginalId').value = '';
+            document.getElementById('formMemberId').value = `OBC10${membersData.length + 1}`;
+            document.getElementById('formMemberId').disabled = false;
+            document.getElementById('formFullName').value = '';
+            document.getElementById('formPhone').value = '';
+            document.getElementById('formPosition').value = '';
+            document.getElementById('formDistrict').value = '';
+            document.getElementById('formMuni').value = '';
+            document.getElementById('formWard').value = '';
+            document.getElementById('formPhotoPreview').src = 'https://placehold.co/150x150/166534/ffffff?text=Photo';
+            currentUploadedPhoto = '';
+            
+            document.getElementById('memberModal').classList.remove('hidden');
+        }
+
+        function openEditMemberModal(id) {
+            const member = membersData.find(m => m.id === id);
+            if (!member) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Member Record';
+            document.getElementById('editOriginalId').value = member.id;
+            document.getElementById('formMemberId').value = member.id;
+            document.getElementById('formMemberId').disabled = true;
+            document.getElementById('formFullName').value = member.name;
+            document.getElementById('formPhone').value = member.phone;
+            document.getElementById('formPosition').value = member.position;
+            document.getElementById('formDistrict').value = member.district;
+            document.getElementById('formMuni').value = member.muni;
+            document.getElementById('formWard').value = member.ward;
+            document.getElementById('formPhotoPreview').src = member.photo || 'https://placehold.co/150x150/166534/ffffff?text=Photo';
+            currentUploadedPhoto = member.photo || '';
+
+            document.getElementById('memberModal').classList.remove('hidden');
+        }
+
+        function closeMemberModal() {
+            document.getElementById('memberModal').classList.add('hidden');
+        }
+
+        // PHOTO UPLOAD WITH MAX 5MB VALIDATION
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            const errEl = document.getElementById('fileError');
+            errEl.classList.add('hidden');
+
+            if (!file) return;
+
+            // 5MB Validation
+            if (file.size > 5 * 1024 * 1024) {
+                errEl.textContent = 'File size exceeds maximum allowed limit of 5MB.';
+                errEl.classList.remove('hidden');
+                e.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                currentUploadedPhoto = evt.target.result;
+                document.getElementById('formPhotoPreview').src = currentUploadedPhoto;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveMemberForm(e) {
+            e.preventDefault();
+
+            const origId = document.getElementById('editOriginalId').value;
+            const newId = document.getElementById('formMemberId').value.trim().toUpperCase();
+
+            const newMember = {
+                id: newId,
+                name: document.getElementById('formFullName').value.trim(),
+                phone: document.getElementById('formPhone').value.trim(),
+                position: document.getElementById('formPosition').value.trim(),
+                district: document.getElementById('formDistrict').value.trim(),
+                muni: document.getElementById('formMuni').value.trim(),
+                ward: document.getElementById('formWard').value.trim(),
+                photo: currentUploadedPhoto || 'https://placehold.co/150x150/166534/ffffff?text=Member'
+            };
+
+            if (origId) {
+                const index = membersData.findIndex(m => m.id === origId);
+                if (index !== -1) membersData[index] = newMember;
+            } else {
+                if (membersData.some(m => m.id === newId)) {
+                    alert('Error: A member with this ID already exists!');
+                    return;
+                }
+                membersData.push(newMember);
+            }
+
+            saveMembersToStorage();
+            closeMemberModal();
+        }
+
+        function deleteMember(id) {
+            if (confirm(`Are you sure you want to delete member ${id}?`)) {
+                membersData = membersData.filter(m => m.id !== id);
+                saveMembersToStorage();
+            }
+        }
+
+        // EXPORT DATA
+        function exportDataJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(membersData, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `OBC_Kisaan_Members_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        // CHANGE PASSWORD
+        function openChangePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('hidden');
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+        }
+
+        function saveNewPassword(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('newAdminPassword').value.trim();
+            if (newPass) {
+                localStorage.setItem('obc_admin_pass', newPass);
+                alert('Admin password updated successfully!');
+                closePasswordModal();
+            }
+        }
+
+        // QR CODE HUB
+        function generateWebsiteQRCode() {
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: window.location.href,
+                width: 160,
+                height: 160,
+                colorDark: "#052e16",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function openQrModal() {
+            document.getElementById('qrModal').classList.remove('hidden');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
