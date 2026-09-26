@@ -1,41 +1,111 @@
-Nepal OBC Kisaan Mahasangh (नेपाल पिछडा वर्ग किसान महासंघ)
-# Nepal OBC Kisaan Mahasangh
+Website Name
 
-A mobile-friendly member verification website with:
-- Admin-only member management
-- Secure password hashing
-- Member IDs such as OBC123
-- Public member search
-- Member photo upload (maximum 5 MB)
-- QR code for opening the website
-- SQLite database
+Nepal OBC Kisaan Mahasangh
 
-## Requirements
-Install Node.js 18+.
+Create a professional, mobile-friendly website that works directly in Google Chrome and other web browsers on both iPhone and Android.
 
-## Setup
+1. Admin Login & Security
 
-1. Open a terminal in this project folder.
-2. Run:
-   npm install
-3. Copy `.env.example` to `.env`.
-4. Change `ADMIN_PASSWORD` and `SESSION_SECRET` in `.env`.
-5. Start:
-   npm start
-6. Open:
-   http://localhost:3000
+* Only the Admin can access the member-management section.
+* Admin login must be protected with a password.
+* Only Admin can:
+    * Add new members
+    * Edit member information
+    * Delete members
+    * Change the Admin password
+    * Upload or change member photos
+* Normal visitors must not be able to access or see the Admin password or member-management controls.
 
-Default admin username:
-`admin`
+2. Add Member
 
-The admin password is the value you put in `.env`.
+Create an “Add Member” option available only after Admin login.
 
-## Important before putting it online
-- Use HTTPS.
-- Change the admin password and SESSION_SECRET.
-- Set SITE_URL to the real HTTPS website address.
-- Keep `.env`, `data/`, and the `uploads/` folder private from direct file browsing.
-- Back up the SQLite database regularly.
+When adding a member, include fields such as:
 
-## QR code
-The Admin Dashboard generates a QR code for the value of `SITE_URL`.
+* Member ID (example: OBC123)
+* Full Name
+* Address
+* District
+* Municipality/Rural Municipality
+* Ward No.
+* Phone Number
+* Position/Role
+* Member photo
+
+Allow the Admin to upload a member photo with a maximum file size of 5 MB.
+
+3. Member Search
+
+Add a prominent Search Member box on the website.
+
+Example:
+
+* A person types OBC123
+* The website searches the member database
+* If the ID exists, show the corresponding member’s information and photo.
+* If the ID does not exist, display “Member not found.”
+
+The search should be fast and work well on mobile phones.
+
+4. Member Information Page
+
+When a valid Member ID is found, display the member’s registered information in a clean ID/profile format.
+
+Example:
+
+Member ID: OBC123
+Name: [Member Name]
+District: [District]
+Municipality: [Municipality]
+Ward: [Ward]
+Position: [Position]
+Photo: [Member Photo]
+
+5. QR Code
+
+Create a QR Code that contains the website address.
+
+When someone scans the QR code using their phone camera:
+
+1. The phone recognizes the QR code.
+2. They tap the link.
+3. The website opens directly in Chrome/browser.
+4. They can immediately use the Member Search feature.
+
+Also provide an Admin option to download/print the QR code.
+
+6. Website Pages
+
+Include:
+
+* Home
+* About Nepal OBC Kisaan Mahasangh
+* Member Search
+* Member Information
+* Contact
+* Admin Login
+* Admin Dashboard
+
+7. Design
+
+Use a professional, clean and trustworthy design suitable for an organization.
+
+Requirements:
+
+* Fully responsive for iPhone, Android, tablet and computer.
+* Easy-to-use search box.
+* Clear navigation menu.
+* Fast loading.
+* Secure database.
+* HTTPS/SSL.
+* Member information should only show information that the organization intends to make publicly searchable.
+
+8. Important Security Requirement
+
+Do not store the Admin password in the website’s visible frontend code. Use secure server-side authentication and password hashing.
+
+The member database and Admin dashboard must be protected so that ordinary visitors cannot add, edit or delete members.
+
+Main Goal
+
+The final website should allow the organization to maintain its member database securely. Visitors can open the website through Chrome, enter a Member ID such as OBC123, and quickly see the corresponding registered member information. A QR code should provide an easy way to open the website.
